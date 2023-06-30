@@ -2,14 +2,13 @@ package br.com.faturamento.resources;
 
 import br.com.faturamento.model.LancamentoModel;
 import br.com.faturamento.services.LancamentoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -20,19 +19,32 @@ public class LancamentoResource {
 
     @GetMapping
     public List<LancamentoModel> listar() {
-        return this.lancamentoService.listar();
+        return lancamentoService.listar();
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<LancamentoModel> pesquisarPorCodigo(@PathVariable Integer codigo) {
-        Optional<LancamentoModel> lancamentoRecuperado = lancamentoService.pesquisarPorCodigo(codigo);
-        return lancamentoRecuperado.isPresent() ? ResponseEntity.ok(lancamentoRecuperado.get())
-                : ResponseEntity.notFound().build();
+        LancamentoModel lancamentoRecuperado = lancamentoService.pesquisarPorCodigo(codigo);
+        return ResponseEntity.ok(lancamentoRecuperado);
     }
 
     @PostMapping
-    public ResponseEntity<LancamentoModel> salvar(@Validated @RequestBody LancamentoModel lacamento) {
+    public ResponseEntity<LancamentoModel> salvar(@Valid @RequestBody LancamentoModel lacamento) {
         LancamentoModel lancamentoSalvo = lancamentoService.salvar(lacamento);
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Integer codigo) {
+        lancamentoService.remover(codigo);
+    }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity<LancamentoModel> atualizar(@PathVariable Integer codigo,
+            @Valid @RequestBody LancamentoModel lancamento) {
+
+        LancamentoModel lancamentoAtualizado = lancamentoService.atualizar(codigo, lancamento);
+        return ResponseEntity.ok(lancamentoAtualizado);
     }
 }

@@ -25,8 +25,8 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> handleObjectNotFound(ObjectNotFoundException error, HttpServletRequest request) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body(new StandardError(HttpStatus.BAD_REQUEST.value(), error.getMessage(), sdf.format(HORA)));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).
+                body(new StandardError(HttpStatus.NOT_FOUND.value(), error.getMessage(), sdf.format(HORA)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class LancamentoServiceTest {
@@ -44,9 +43,9 @@ public class LancamentoServiceTest {
     @Test
     @DisplayName("Recuperando lançamento pelo código")
     public void buscarPorCodigo() {
-        Optional<LancamentoModel> lancamento = lancamentoService.pesquisarPorCodigo(1);
+        LancamentoModel lancamento = lancamentoService.pesquisarPorCodigo(1);
 
-        if (lancamento.get().getCodigo() != 1) {
+        if (lancamento.getCodigo() != 1) {
             throw new RuntimeException("Não foi possível recuperar o lançamento.");
         }
     }
