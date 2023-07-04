@@ -3,7 +3,6 @@ package br.com.faturamento.services;
 import br.com.faturamento.model.LancamentoModel;
 import br.com.faturamento.repositories.LancamentoRepository;
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class LancamentoService {
 
     public LancamentoModel pesquisarPorCodigo(Integer codigo) {
         return lancamentoRepository.findById(codigo).orElseThrow(() ->
-                new ObjectNotFoundException("Lançamento com código" + codigo + ", não encontrado!"
+               new ObjectNotFoundException("Lançamento com código " + codigo + ", não encontrado!"
                         , LancamentoModel.class));
     }
 
@@ -37,7 +36,9 @@ public class LancamentoService {
     public LancamentoModel atualizar(Integer codigo, LancamentoModel lancamento) {
         LancamentoModel lancamentoRecuperado = pesquisarPorCodigo(codigo);
 
-        BeanUtils.copyProperties(lancamento, lancamentoRecuperado, "codigo");
-        return lancamentoRepository.save(lancamentoRecuperado);
+        lancamento.setCodigo(lancamentoRecuperado.getCodigo());
+        lancamento.setRegistro(lancamentoRecuperado.getRegistro());
+
+        return lancamentoRepository.save(lancamento);
     }
 }

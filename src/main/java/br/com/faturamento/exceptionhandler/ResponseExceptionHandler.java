@@ -6,16 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 @RestControllerAdvice
-public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+public class ResponseExceptionHandler {
 
     private static final String DEFAULT_VALIDATION_ERROR = "Validation error. Check 'errors' field for details.";
     private static final String UNKNOW_ERROR = "Unknow error occurred.";
@@ -24,13 +22,13 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     Date HORA = Calendar.getInstance().getTime();
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> handleObjectNotFound(ObjectNotFoundException error, HttpServletRequest request) {
+    private ResponseEntity<StandardError> handleObjectNotFound(ObjectNotFoundException error, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).
-                body(new StandardError(HttpStatus.NOT_FOUND.value(), error.getMessage(), sdf.format(HORA)));
+                body(new StandardError(HttpStatus.NOT_FOUND.value(), error.getEntityName(), sdf.format(HORA)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> handleValidation(MethodArgumentNotValidException error, HttpServletRequest request) {
+    private ResponseEntity<StandardError> handleArgumetnNotValid(MethodArgumentNotValidException error, HttpServletRequest request) {
         StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(),
                 DEFAULT_VALIDATION_ERROR, sdf.format(HORA));
 
@@ -40,9 +38,8 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<StandardError> handleAllUncaughtException(Exception error, HttpServletRequest request) {
+    private ResponseEntity<StandardError> handleAllUncaughtException(Exception error, HttpServletRequest request) {
         StandardError standardError = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 UNKNOW_ERROR, sdf.format(HORA));
 

@@ -1,4 +1,4 @@
-package br.com.faturamento.model;
+package br.com.faturamento.model.enums;
 
 public enum TipoLancamento {
 

@@ -1,10 +1,11 @@
 package br.com.faturamento.model;
 
+import br.com.faturamento.model.enums.TipoLancamento;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -26,8 +27,10 @@ public class LancamentoModel {
     private TipoLancamento tipo;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private Date dataLancamento;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
     private Date registro = new Date();
 
     public LancamentoModel() {
@@ -57,12 +60,12 @@ public class LancamentoModel {
         return tipo;
     }
 
-    public String getDataLancamento() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(this.dataLancamento);
+    public Date getDataLancamento() {
+        return dataLancamento;
     }
 
-    public String getRegistro() {
-        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.registro);
+    public Date getRegistro() {
+        return registro;
     }
 
     public void setCodigo(Integer codigo) {
@@ -83,6 +86,10 @@ public class LancamentoModel {
 
     public void setDataLancamento(Date dataLancamento) {
         this.dataLancamento = dataLancamento;
+    }
+
+    public void setRegistro(Date registro) {
+        this.registro = registro;
     }
 
     @Override
