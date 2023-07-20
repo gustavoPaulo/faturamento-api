@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -21,7 +21,7 @@ public class LancamentoServiceTest {
 
     private final LancamentoModel lancamentoTeste = new LancamentoModel(
             BigDecimal.valueOf(150), "Pagamento de conta de luz",
-            TipoLancamento.DESPESA, new Date());
+            TipoLancamento.DESPESA, LocalDate.now());
 
     @Test
     @DisplayName("Listando todos os lançamentos")

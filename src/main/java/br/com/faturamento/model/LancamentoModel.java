@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -28,16 +29,16 @@ public class LancamentoModel {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
-    private Date dataLancamento;
+    private LocalDate dataLancamento;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
-    private Date registro = new Date();
+    private LocalDateTime registro = LocalDateTime.now();
 
     public LancamentoModel() {
 
     }
 
-    public LancamentoModel(BigDecimal valor, String descricao, TipoLancamento tipo, Date dataLancamento) {
+    public LancamentoModel(BigDecimal valor, String descricao, TipoLancamento tipo, LocalDate dataLancamento) {
         this.valor = valor;
         this.descricao = descricao;
         this.tipo = tipo;
@@ -60,11 +61,11 @@ public class LancamentoModel {
         return tipo;
     }
 
-    public Date getDataLancamento() {
+    public LocalDate getDataLancamento() {
         return dataLancamento;
     }
 
-    public Date getRegistro() {
+    public LocalDateTime getRegistro() {
         return registro;
     }
 
@@ -84,11 +85,11 @@ public class LancamentoModel {
         this.tipo = tipo;
     }
 
-    public void setDataLancamento(Date dataLancamento) {
+    public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
     }
 
-    public void setRegistro(Date registro) {
+    public void setRegistro(LocalDateTime registro) {
         this.registro = registro;
     }
 
