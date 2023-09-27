@@ -1,6 +1,7 @@
 package br.com.faturamento.model;
 
 import br.com.faturamento.model.enums.TipoLancamento;
+import br.com.faturamento.useful.Utils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,10 +29,10 @@ public class LancamentoModel {
     private TipoLancamento tipo;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Utils.DATE_PATTERN, locale = Utils.DATE_LOCALE, timezone = Utils.DATE_TIMEZONE)
     private LocalDate dataLancamento;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Utils.DATE_TIME_PATTERN, locale = Utils.DATE_LOCALE, timezone = Utils.DATE_TIMEZONE)
     private LocalDateTime registro = LocalDateTime.now();
 
     public LancamentoModel() {

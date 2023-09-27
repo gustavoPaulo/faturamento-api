@@ -3,8 +3,7 @@ package br.com.faturamento.services;
 import br.com.faturamento.model.LancamentoModel;
 import br.com.faturamento.model.enums.TipoLancamento;
 import org.hibernate.ObjectNotFoundException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
@@ -12,16 +11,32 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SpringBootTest
 public class LancamentoServiceTest {
+
+    public static final Logger LOG = Logger.getLogger(LancamentoServiceTest.class.getName());
+
+    private static final String LANCAMENTO_DESCRICAO = "Pagamento de conta de luz";
 
     @Autowired
     private LancamentoService lancamentoService;
 
     private final LancamentoModel lancamentoTeste = new LancamentoModel(
-            BigDecimal.valueOf(150), "Pagamento de conta de luz",
+            BigDecimal.valueOf(150), LANCAMENTO_DESCRICAO,
             TipoLancamento.DESPESA, LocalDate.now());
+
+    @AfterEach
+    void cleanDataTests() {
+        try {
+            lancamentoService.remover(lancamentoTeste.getCodigo());
+            LOG.info("Dados removidos com sucesso!");
+
+        } catch (ObjectNotFoundException e) {
+            LOG.info("Não existem dados a serem removidos.");
+        }
+    }
 
     @Test
     @DisplayName("Listando todos os lançamentos")
@@ -56,8 +71,6 @@ public class LancamentoServiceTest {
     void remover() {
         LancamentoModel lancamento = lancamentoService.salvar(lancamentoTeste);
 
-        Assert.notNull(lancamento, "O lançamento não pode ser nulo.");
-
         lancamentoService.remover(lancamento.getCodigo());
 
         String messageExpected = "Lançamento com código " + lancamento.getCodigo() + ", não encontrado!";
@@ -66,8 +79,8 @@ public class LancamentoServiceTest {
         try {
             lancamentoService.pesquisarPorCodigo(lancamento.getCodigo());
 
-        } catch (ObjectNotFoundException ex) {
-            messageFromException = ex.getEntityName();
+        } catch (ObjectNotFoundException e) {
+            messageFromException = e.getEntityName();
         }
 
         Assert.isTrue(messageFromException.equals(messageExpected),
@@ -78,8 +91,6 @@ public class LancamentoServiceTest {
     @DisplayName("Atualizando lançamento")
     void atualizar() {
         LancamentoModel lancamento = lancamentoService.salvar(lancamentoTeste);
-
-        Assert.notNull(lancamento, "O lançamento não pode ser nulo.");
 
         lancamento.setValor(BigDecimal.valueOf(600));
         lancamento.setDescricao("Lançamento alterado");

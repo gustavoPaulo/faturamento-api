@@ -29,8 +29,8 @@ public class LancamentoResource {
     }
 
     @PostMapping
-    public ResponseEntity<LancamentoModel> salvar(@Valid @RequestBody LancamentoModel lacamento) {
-        LancamentoModel lancamentoSalvo = lancamentoService.salvar(lacamento);
+    public ResponseEntity<LancamentoModel> salvar(@Valid @RequestBody LancamentoModel lancamento) {
+        LancamentoModel lancamentoSalvo = lancamentoService.salvar(lancamento);
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
     }
 
