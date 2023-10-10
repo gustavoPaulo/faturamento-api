@@ -29,7 +29,7 @@ public class LancamentoService {
     public LancamentoModel pesquisarPorCodigo(Integer codigo) {
         return lancamentoRepository.findById(codigo).orElseThrow(() ->
                 new ObjectNotFoundException(Utils.ERROR_LANCAMENTO_NOT_FOUND
-                        .replace("code", Integer.toString(codigo))
+                        .replace(Utils.MODEL_LANCAMENTO_CODIGO, Integer.toString(codigo))
                         , LancamentoModel.class));
     }
 
@@ -48,10 +48,9 @@ public class LancamentoService {
     }
 
     private void verifyIfExist(LancamentoModel lancamento) {
-        Optional<LancamentoModel> lancamentoRecuperado = lancamentoRepository.verifyIfExist(lancamento.getValor(),
-                        lancamento.getDescricao(), lancamento.getTipo(), lancamento.getDataLancamento());
+        Optional<LancamentoModel> lancamentoRecuperado = lancamentoRepository.verifyIfExist(lancamento);
 
-        if (lancamentoRecuperado != null && lancamentoRecuperado.isPresent()) {
+        if (lancamentoRecuperado.get().getCodigo() != null && lancamentoRecuperado.isPresent()) {
             throw new ObjectAlreadyExistsException();
         }
     }

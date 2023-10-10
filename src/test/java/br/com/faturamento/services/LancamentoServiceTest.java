@@ -2,6 +2,7 @@ package br.com.faturamento.services;
 
 import br.com.faturamento.model.LancamentoModel;
 import br.com.faturamento.model.enums.TipoLancamento;
+import br.com.faturamento.useful.Utils;
 import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,64 +17,63 @@ import java.util.logging.Logger;
 @SpringBootTest
 public class LancamentoServiceTest {
 
-    public static final Logger LOG = Logger.getLogger(LancamentoServiceTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(LancamentoServiceTest.class.getName());
 
-    private static final String LANCAMENTO_DESCRICAO = "Pagamento de conta de luz";
+    private final LancamentoModel lancamentoTeste = new LancamentoModel(
+            BigDecimal.valueOf(150), Utils.TESTE_LANCAMENTO_DESCRICAO,
+            TipoLancamento.DESPESA, LocalDate.now());
 
     @Autowired
     private LancamentoService lancamentoService;
-
-    private final LancamentoModel lancamentoTeste = new LancamentoModel(
-            BigDecimal.valueOf(150), LANCAMENTO_DESCRICAO,
-            TipoLancamento.DESPESA, LocalDate.now());
 
     @AfterEach
     void cleanDataTests() {
         try {
             lancamentoService.remover(lancamentoTeste.getCodigo());
-            LOG.info("Dados removidos com sucesso!");
+            LOG.info(Utils.LOG_INFO_REMOCAO_SUCESSO);
 
         } catch (ObjectNotFoundException e) {
-            LOG.info("Não existem dados a serem removidos.");
+            LOG.info(Utils.LOG_INFO_REMOCAO_DADOS_INEXISTENTES);
         }
     }
 
     @Test
-    @DisplayName("Listando todos os lançamentos")
+    @DisplayName(Utils.TESTE_TITULO_LISTAR)
     void listar() {
         lancamentoService.salvar(lancamentoTeste);
 
         List<LancamentoModel> lista = lancamentoService.listar();
 
-        Assert.notEmpty(lista, "A lista não pode ser vazia.");
+        Assert.notEmpty(lista, Utils.TESTE_LISTAR_LISTA_NAO_PODE_VAZIA);
     }
 
     @Test
-    @DisplayName("Criando novo lançamento")
+    @DisplayName(Utils.TESTE_TITULO_SALVAR)
     void salvar() {
         LancamentoModel lancamento = lancamentoService.salvar(lancamentoTeste);
 
-        Assert.notNull(lancamento, "O lançamento não pode ser nulo.");
+        Assert.notNull(lancamento, Utils.TESTE_SALVAR_LANCAMENTO_NAO_PODE_NULO);
     }
 
     @Test
-    @DisplayName("Recuperando lançamento pelo código")
+    @DisplayName(Utils.TESTE_TITULO_PESQUISAR_POR_CODIGO)
     void pesquisarPorCodigo() {
         LancamentoModel lancamentoSalvo = lancamentoService.salvar(lancamentoTeste);
 
         LancamentoModel lancamentoRecuperado = lancamentoService.pesquisarPorCodigo(lancamentoSalvo.getCodigo());
 
-        Assert.notNull(lancamentoRecuperado, "O lançamento não pode ser nulo.");
+        Assert.notNull(lancamentoRecuperado, Utils.TESTE_SALVAR_LANCAMENTO_NAO_PODE_NULO);
     }
 
     @Test
-    @DisplayName("Removendo lançamento")
+    @DisplayName(Utils.TESTE_TITULO_REMOVER)
     void remover() {
         LancamentoModel lancamento = lancamentoService.salvar(lancamentoTeste);
 
         lancamentoService.remover(lancamento.getCodigo());
 
-        String messageExpected = "Lançamento com código " + lancamento.getCodigo() + ", não encontrado!";
+        String messageExpected = Utils.ERROR_LANCAMENTO_NOT_FOUND
+                .replace(Utils.MODEL_LANCAMENTO_CODIGO, lancamento.getCodigo().toString());
         String messageFromException = "";
 
         try {
@@ -84,28 +84,28 @@ public class LancamentoServiceTest {
         }
 
         Assert.isTrue(messageFromException.equals(messageExpected),
-        "Este método deve retornar uma exceção de objeto não encontrado.");
+        Utils.TESTE_REMOVER_LANCAMENTO_NAO_PODE_EXISTIR);
     }
 
     @Test
-    @DisplayName("Atualizando lançamento")
+    @DisplayName(Utils.TESTE_TITULO_ATUALIZAR)
     void atualizar() {
         LancamentoModel lancamento = lancamentoService.salvar(lancamentoTeste);
 
         lancamento.setValor(BigDecimal.valueOf(600));
-        lancamento.setDescricao("Lançamento alterado");
+        lancamento.setDescricao(Utils.TESTE_LANCAMENTO_DESCRICAO_ATUALIZADA);
         lancamento.setTipo(TipoLancamento.RECEITA);
 
         LancamentoModel lancamentoAtualizado = lancamentoService.atualizar(
                 lancamento.getCodigo(), lancamento);
 
         Assert.isTrue(lancamento.getCodigo() == lancamentoAtualizado.getCodigo(),
-        "Os códigos devem ser iguais.");
+        Utils.TESTE_ATUALIZAR_LANCAMENTO_CODIGO_DEVE_SER_IGUAL);
 
         Assert.isTrue(lancamentoAtualizado.getValor().compareTo(BigDecimal.valueOf(600)) == 0,
-        "O valor deve ser igual a 600.");
+        Utils.TESTE_ATUALIZAR_LANCAMENTO_VALOR_DEVE_SER_IGUAL_600);
 
         Assert.isTrue(lancamentoAtualizado.getTipo().equals(TipoLancamento.RECEITA),
-        "O tipo do lançamento deve ser de Receita");
+        Utils.TESTE_ATUALIZAR_LANCAMENTO_TIPO_DEVE_SER_IGUAL);
     }
 }
