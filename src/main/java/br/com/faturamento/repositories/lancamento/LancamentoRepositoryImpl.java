@@ -1,7 +1,6 @@
 package br.com.faturamento.repositories.lancamento;
 
 import br.com.faturamento.model.LancamentoModel;
-import br.com.faturamento.services.exceptions.ObjectAlreadyExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "lancamento")
+@Table(name = Utils.ENTITY_NAME_LANCAMENTO)
 public class LancamentoModel {
 
     @Id

@@ -54,17 +54,19 @@ public class Utils {
 
     public static final String TESTE_ATUALIZAR_LANCAMENTO_TIPO_DEVE_SER_IGUAL = "O tipo do lançamento deve ser de Receita";
 
-    public static final String getDateTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_PATTERN);
-        Date HORA = Calendar.getInstance().getTime();
+    public static final String ENTITY_NAME_LANCAMENTO = "lancamento";
 
-        return sdf.format(HORA);
+    public static String getDateTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_PATTERN);
+        Date dataHora = Calendar.getInstance().getTime();
+
+        return sdf.format(dataHora);
     }
 
-    public static final String getDate() {
+    public static String getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-        Date HORA = Calendar.getInstance().getTime();
+        Date data = Calendar.getInstance().getTime();
 
-        return sdf.format(HORA);
+        return sdf.format(data);
     }
 }

@@ -73,7 +73,7 @@ public class LancamentoServiceTest {
         lancamentoService.remover(lancamento.getCodigo());
 
         String messageExpected = Utils.ERROR_LANCAMENTO_NOT_FOUND
-                .replace(Utils.MODEL_LANCAMENTO_CODIGO, lancamento.getCodigo().toString());
+                .replace(Utils.MODEL_LANCAMENTO_CODIGO, Integer.toString(lancamento.getCodigo()));
         String messageFromException = "";
 
         try {
