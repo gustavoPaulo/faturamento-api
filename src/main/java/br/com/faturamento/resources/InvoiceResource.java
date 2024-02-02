@@ -2,6 +2,7 @@ package br.com.faturamento.resources;
 
 import br.com.faturamento.model.InvoiceModel;
 import br.com.faturamento.services.InvoiceService;
+import br.com.faturamento.useful.Utility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping(Utility.RESOURCE_REQUEST_MAPPING)
 public class InvoiceResource {
 
     @Autowired
@@ -22,7 +23,7 @@ public class InvoiceResource {
         return invoiceService.list();
     }
 
-    @GetMapping("/{code}")
+    @GetMapping(Utility.RESOURCE_INVOICE_CODE)
     public ResponseEntity<InvoiceModel> findByCode(@PathVariable Integer code) {
         InvoiceModel invoiceRecovered = invoiceService.findByCode(code);
         return ResponseEntity.ok(invoiceRecovered);
@@ -34,13 +35,13 @@ public class InvoiceResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(invoiceSaved);
     }
 
-    @DeleteMapping("/{code}")
+    @DeleteMapping(Utility.RESOURCE_INVOICE_CODE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer code) {
         invoiceService.delete(code);
     }
 
-    @PutMapping("/{code}")
+    @PutMapping(Utility.RESOURCE_INVOICE_CODE)
     public ResponseEntity<InvoiceModel> update(@PathVariable Integer code,
                                                   @Valid @RequestBody InvoiceModel invoice) {
 

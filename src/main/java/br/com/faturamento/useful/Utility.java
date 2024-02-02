@@ -34,6 +34,10 @@ public class Utility {
 
     public static final String MODEL_INVOICE_DATERELEASE = "dateRelease";
 
+    public static final String RESOURCE_INVOICE_CODE = "/{code}";
+
+    public static final String RESOURCE_REQUEST_MAPPING = "/invoices";
+
     public static final String LOG_INFO_REMOVE_SUCCESS = "Dados removidos com sucesso!";
 
     public static final String LOG_INFO_REMOVE_DATA_NOTEXIST = "Não existem dados a serem removidos.";
