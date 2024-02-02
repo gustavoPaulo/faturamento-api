@@ -1,8 +1,0 @@
-CREATE TABLE lancamento (
-	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	valor DECIMAL(10,2) NOT NULL,
-	descricao VARCHAR(500),
-	tipo VARCHAR(20) NOT NULL,
-	data_lancamento DATE NOT NULL,
-	registro DATETIME NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

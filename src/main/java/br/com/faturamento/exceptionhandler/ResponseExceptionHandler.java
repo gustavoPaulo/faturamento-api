@@ -1,7 +1,7 @@
 package br.com.faturamento.exceptionhandler;
 
 import br.com.faturamento.services.exceptions.ObjectAlreadyExistsException;
-import br.com.faturamento.useful.Utils;
+import br.com.faturamento.useful.Utility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class ResponseExceptionHandler {
                                                                HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).
                 body(new StandardError(HttpStatus.NOT_FOUND.value(),
-                        error.getEntityName(), Utils.getDateTime()));
+                        error.getEntityName(), Utility.getDateTime()));
     }
 
     @ExceptionHandler(ObjectAlreadyExistsException.class)
@@ -26,17 +26,17 @@ public class ResponseExceptionHandler {
                                                                HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                 body(new StandardError(HttpStatus.BAD_REQUEST.value(),
-                        Utils.ERROR_LANCAMENTO_EXISTS, Utils.getDateTime()));
+                        Utility.ERROR_INVOICE_ALREADY_EXISTS, Utility.getDateTime()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<StandardError> handleArgumetnNotValid(MethodArgumentNotValidException error,
                                                                  HttpServletRequest request) {
         StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(),
-                Utils.ERROR_DEFAULT_VALIDATION, Utils.getDateTime());
+                Utility.ERROR_DEFAULT_VALIDATION, Utility.getDateTime());
 
-        error.getBindingResult().getFieldErrors().forEach(erro ->
-                standardError.addError(erro.getField(), erro.getDefaultMessage()));
+        error.getBindingResult().getFieldErrors().forEach(erros ->
+                standardError.addError(erros.getField(), erros.getDefaultMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
     }
@@ -44,7 +44,7 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(Exception.class)
     private ResponseEntity<StandardError> handleAllUncaughtException(Exception error, HttpServletRequest request) {
         StandardError standardError = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                Utils.ERROR_UNKNOW, Utils.getDateTime());
+                Utility.ERROR_UNKNOW, Utility.getDateTime());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(standardError);
     }
