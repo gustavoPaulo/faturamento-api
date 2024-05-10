@@ -1,7 +1,7 @@
-package br.com.faturamento.model;
+package br.com.billing.faturamento.model;
 
-import br.com.faturamento.model.enums.TypeInvoice;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.model.enums.TypeInvoice;
+import br.com.billing.faturamento.useful.Utility;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

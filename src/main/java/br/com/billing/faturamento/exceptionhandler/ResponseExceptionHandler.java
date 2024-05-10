@@ -1,7 +1,7 @@
-package br.com.faturamento.exceptionhandler;
+package br.com.billing.faturamento.exceptionhandler;
 
-import br.com.faturamento.services.exceptions.ObjectAlreadyExistsException;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.services.exceptions.ObjectAlreadyExistsException;
+import br.com.billing.faturamento.useful.Utility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
-package br.com.faturamento.services;
+package br.com.billing.faturamento.services;
 
-import br.com.faturamento.model.InvoiceModel;
-import br.com.faturamento.repositories.InvoiceRepository;
-import br.com.faturamento.services.exceptions.ObjectAlreadyExistsException;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.repositories.InvoiceRepository;
+import br.com.billing.faturamento.services.exceptions.ObjectAlreadyExistsException;
+import br.com.billing.faturamento.useful.Utility;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

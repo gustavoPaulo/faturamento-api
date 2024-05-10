@@ -1,7 +1,7 @@
-package br.com.faturamento.repositories;
+package br.com.billing.faturamento.repositories;
 
-import br.com.faturamento.model.InvoiceModel;
-import br.com.faturamento.repositories.invoice.InvoiceRepositoryQuery;
+import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.repositories.invoice.InvoiceRepositoryQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,8 @@
-package br.com.faturamento.resources;
+package br.com.billing.faturamento.resources;
 
-import br.com.faturamento.model.InvoiceModel;
-import br.com.faturamento.services.InvoiceService;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.services.InvoiceService;
+import br.com.billing.faturamento.useful.Utility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

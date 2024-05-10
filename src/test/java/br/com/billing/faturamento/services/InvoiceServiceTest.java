@@ -1,8 +1,8 @@
-package br.com.faturamento.services;
+package br.com.billing.faturamento.services;
 
-import br.com.faturamento.model.InvoiceModel;
-import br.com.faturamento.model.enums.TypeInvoice;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.model.enums.TypeInvoice;
+import br.com.billing.faturamento.useful.Utility;
 import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

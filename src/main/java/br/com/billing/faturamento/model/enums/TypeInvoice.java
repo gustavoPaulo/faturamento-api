@@ -1,4 +1,4 @@
-package br.com.faturamento.model.enums;
+package br.com.billing.faturamento.model.enums;
 
 public enum TypeInvoice {
 

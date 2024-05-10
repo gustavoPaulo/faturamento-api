@@ -1,4 +1,4 @@
-package br.com.faturamento.exceptionhandler;
+package br.com.billing.faturamento.exceptionhandler;
 
 import java.io.Serializable;
 

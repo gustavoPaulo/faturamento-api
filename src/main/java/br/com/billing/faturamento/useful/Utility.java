@@ -1,4 +1,4 @@
-package br.com.faturamento.useful;
+package br.com.billing.faturamento.useful;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

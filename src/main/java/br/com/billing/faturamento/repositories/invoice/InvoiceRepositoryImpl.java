@@ -1,7 +1,7 @@
-package br.com.faturamento.repositories.invoice;
+package br.com.billing.faturamento.repositories.invoice;
 
-import br.com.faturamento.model.InvoiceModel;
-import br.com.faturamento.useful.Utility;
+import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.useful.Utility;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
