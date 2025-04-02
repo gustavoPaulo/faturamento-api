@@ -1,5 +1,6 @@
 package br.com.billing.faturamento.services;
 
+import br.com.billing.faturamento.model.InvoiceFilterModel;
 import br.com.billing.faturamento.model.InvoiceModel;
 import br.com.billing.faturamento.repositories.InvoiceRepository;
 import br.com.billing.faturamento.services.exceptions.ObjectAlreadyExistsException;
@@ -46,6 +47,10 @@ public class InvoiceService {
         invoice.setRegistration(invoiceRecovered.getRegistration());
 
         return invoiceRepository.save(invoice);
+    }
+
+    public List<InvoiceModel> findByFilter(InvoiceFilterModel filter) {
+        return invoiceRepository.findByFilter(filter);
     }
 
     private void verifyIfExist(InvoiceModel invoice) {

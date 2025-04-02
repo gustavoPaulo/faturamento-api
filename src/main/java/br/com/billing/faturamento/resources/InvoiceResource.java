@@ -1,5 +1,6 @@
 package br.com.billing.faturamento.resources;
 
+import br.com.billing.faturamento.model.InvoiceFilterModel;
 import br.com.billing.faturamento.model.InvoiceModel;
 import br.com.billing.faturamento.services.InvoiceService;
 import br.com.billing.faturamento.useful.Utility;
@@ -21,6 +22,11 @@ public class InvoiceResource {
     @GetMapping
     public List<InvoiceModel> list() {
         return invoiceService.list();
+    }
+
+    @GetMapping(value = Utility.RESOURCE_INVOICE_FILTER, params = "filter")
+    public List<InvoiceModel> findByFilter(InvoiceFilterModel filter) {
+        return invoiceService.findByFilter(filter);
     }
 
     @GetMapping(Utility.RESOURCE_INVOICE_CODE)

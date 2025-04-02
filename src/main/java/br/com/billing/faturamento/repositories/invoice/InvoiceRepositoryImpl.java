@@ -1,5 +1,6 @@
 package br.com.billing.faturamento.repositories.invoice;
 
+import br.com.billing.faturamento.model.InvoiceFilterModel;
 import br.com.billing.faturamento.model.InvoiceModel;
 import br.com.billing.faturamento.useful.Utility;
 import jakarta.persistence.EntityManager;
@@ -10,9 +11,10 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class InvoiceRepositoryImpl implements InvoiceRepositoryQuery {
 
@@ -35,6 +37,21 @@ public class InvoiceRepositoryImpl implements InvoiceRepositoryQuery {
                 : typedQuery.getSingleResult());
     }
 
+    @Override
+    public List<InvoiceModel> findByFilter(InvoiceFilterModel filter) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<InvoiceModel> criteria = builder.createQuery(InvoiceModel.class);
+
+        Root<InvoiceModel> root = criteria.from(InvoiceModel.class);
+
+        Predicate[] predicates = createPredicatesByFilter(root, filter, builder);
+        criteria.select(root).where(predicates);
+
+        TypedQuery<InvoiceModel> query = entityManager.createQuery(criteria);
+
+        return query.getResultList();
+    }
+
     private Predicate[] createPredicatesOfEqualities(Root<InvoiceModel> root, InvoiceModel invoice,
                                                      CriteriaBuilder criteriaBuilder) {
 
@@ -46,5 +63,43 @@ public class InvoiceRepositoryImpl implements InvoiceRepositoryQuery {
         predicates.add(criteriaBuilder.equal(root.get(Utility.MODEL_INVOICE_DATERELEASE), invoice.getDateRelease()));
 
         return predicates.toArray(new Predicate[predicates.size()]);
+    }
+
+    private Predicate[] createPredicatesByFilter(Root<InvoiceModel> root, InvoiceFilterModel filter,
+                                                     CriteriaBuilder criteriaBuilder) {
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if(Objects.nonNull(filter.getDescription())) {
+            predicates.add(criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get(Utility.MODEL_INVOICE_DESCRIPTION))
+                    , "%" + filter.getDescription().toLowerCase() + "%"));
+        }
+        if(filter.getPriceMin() > 0) {
+            predicates.add(
+                    criteriaBuilder.greaterThanOrEqualTo(root.get(Utility.MODEL_INVOICE_PRICE), filter.getPriceMin()));
+        }
+        if(filter.getPriceMax() > 0) {
+            predicates.add(
+                    criteriaBuilder.lessThanOrEqualTo(root.get(Utility.MODEL_INVOICE_PRICE), filter.getPriceMax()));
+        }
+        if(Objects.nonNull(filter.getType()) && !filter.getType().equals("TODOS")) {
+            predicates.add(criteriaBuilder.equal(root.get(Utility.MODEL_INVOICE_TYPE), filter.getType()));
+        }
+        if (Objects.nonNull(filter.getDateStart())) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(Utility.MODEL_INVOICE_DATERELEASE),
+                    stringToLocalDate(filter.getDateStart())));
+        }
+        if (Objects.nonNull(filter.getDateEnd())) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(Utility.MODEL_INVOICE_DATERELEASE),
+                    stringToLocalDate(filter.getDateEnd())));
+        }
+
+        return predicates.toArray(new Predicate[predicates.size()]);
+    }
+
+    private LocalDate stringToLocalDate(String date) {
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.ofInstant(new Date(date).toInstant(), ZoneId.systemDefault());
     }
 }

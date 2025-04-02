@@ -1,6 +1,6 @@
 package br.com.billing.faturamento.model;
 
-import br.com.billing.faturamento.model.enums.TypeInvoice;
+import br.com.billing.faturamento.model.enums.InvoiceType;
 import br.com.billing.faturamento.useful.Utility;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -26,7 +26,7 @@ public class InvoiceModel {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private TypeInvoice type;
+    private InvoiceType type;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Utility.DATE_PATTERN, locale = Utility.DATE_LOCALE, timezone = Utility.DATE_TIMEZONE)
@@ -38,7 +38,7 @@ public class InvoiceModel {
     public InvoiceModel() {
     }
 
-    public InvoiceModel(BigDecimal price, String description, TypeInvoice type, LocalDate dateRelease) {
+    public InvoiceModel(BigDecimal price, String description, InvoiceType type, LocalDate dateRelease) {
         this.price = price;
         this.description = description;
         this.type = type;
@@ -69,11 +69,11 @@ public class InvoiceModel {
         this.description = description;
     }
 
-    public TypeInvoice getType() {
+    public InvoiceType getType() {
         return type;
     }
 
-    public void setType(TypeInvoice type) {
+    public void setType(InvoiceType type) {
         this.type = type;
     }
 

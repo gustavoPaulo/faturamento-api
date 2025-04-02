@@ -36,6 +36,8 @@ public class Utility {
 
     public static final String RESOURCE_INVOICE_CODE = "/{code}";
 
+    public static final String RESOURCE_INVOICE_FILTER = "/findByFilter";
+
     public static final String RESOURCE_REQUEST_MAPPING = "/invoices";
 
     public static final String LOG_INFO_REMOVE_SUCCESS = "Dados removidos com sucesso!";

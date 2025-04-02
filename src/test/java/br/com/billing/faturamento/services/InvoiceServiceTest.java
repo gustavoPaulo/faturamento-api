@@ -1,7 +1,7 @@
 package br.com.billing.faturamento.services;
 
 import br.com.billing.faturamento.model.InvoiceModel;
-import br.com.billing.faturamento.model.enums.TypeInvoice;
+import br.com.billing.faturamento.model.enums.InvoiceType;
 import br.com.billing.faturamento.useful.Utility;
 import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
@@ -20,7 +20,7 @@ public class InvoiceServiceTest {
     private static final Logger LOG = Logger.getLogger(InvoiceServiceTest.class.getName());
 
     private final InvoiceModel invoiceTest = new InvoiceModel(BigDecimal.valueOf(150),
-            Utility.TEST_INVOICE_DESCRIPTION, TypeInvoice.EXPENSE, LocalDate.now());
+            Utility.TEST_INVOICE_DESCRIPTION, InvoiceType.EXPENSE, LocalDate.now());
 
     @Autowired
     private InvoiceService invoiceService;
@@ -93,7 +93,7 @@ public class InvoiceServiceTest {
 
         invoice.setPrice(BigDecimal.valueOf(600));
         invoice.setDescription(Utility.TEST_INVOICE_DESCRIPTION_UPDATED);
-        invoice.setType(TypeInvoice.EXPENSE);
+        invoice.setType(InvoiceType.EXPENSE);
 
         InvoiceModel invoiceUpdated = invoiceService.update(invoice.getCode(), invoice);
 
@@ -103,7 +103,7 @@ public class InvoiceServiceTest {
         Assert.isTrue(invoiceUpdated.getPrice().compareTo(BigDecimal.valueOf(600)) == 0,
         Utility.TEST_UPDATE_INVOICE_PRICE_NEEDS_TOBESAME_600);
 
-        Assert.isTrue(invoiceUpdated.getType().equals(TypeInvoice.RECIPE),
+        Assert.isTrue(invoiceUpdated.getType().equals(InvoiceType.RECIPE),
         Utility.TEST_UPDATE_INVOICE_TYPE_NEEDS_TOBESAME);
     }
 }
