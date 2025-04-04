@@ -95,7 +95,7 @@ public class InvoiceServiceTest {
         invoice.setDescription(Utility.TEST_INVOICE_DESCRIPTION_UPDATED);
         invoice.setType(InvoiceType.EXPENSE);
 
-        InvoiceModel invoiceUpdated = invoiceService.update(invoice.getCode(), invoice);
+        InvoiceModel invoiceUpdated = invoiceService.update(invoice);
 
         Assert.isTrue(invoice.getCode().equals(invoiceUpdated.getCode()),
         Utility.TEST_UPDATE_INVOICE_NEEDS_TOBESAME);

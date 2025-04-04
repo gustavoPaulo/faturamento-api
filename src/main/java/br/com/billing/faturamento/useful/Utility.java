@@ -40,6 +40,8 @@ public class Utility {
 
     public static final String RESOURCE_REQUEST_MAPPING = "/invoices";
 
+    public static final String RESOURCE_REQUEST_MAPPING_DASH = "/dashboard";
+
     public static final String LOG_INFO_REMOVE_SUCCESS = "Dados removidos com sucesso!";
 
     public static final String LOG_INFO_REMOVE_DATA_NOTEXIST = "Não existem dados a serem removidos.";

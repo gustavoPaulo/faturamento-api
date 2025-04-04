@@ -47,11 +47,9 @@ public class InvoiceResource {
         invoiceService.delete(code);
     }
 
-    @PutMapping(Utility.RESOURCE_INVOICE_CODE)
-    public ResponseEntity<InvoiceModel> update(@PathVariable Integer code,
-                                                  @Valid @RequestBody InvoiceModel invoice) {
-
-        InvoiceModel invoiceUpdated = invoiceService.update(code, invoice);
+    @PutMapping
+    public ResponseEntity<InvoiceModel> update(@Valid @RequestBody InvoiceModel invoice) {
+        InvoiceModel invoiceUpdated = invoiceService.update(invoice);
         return ResponseEntity.ok(invoiceUpdated);
     }
 }

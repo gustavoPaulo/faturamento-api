@@ -6,9 +6,11 @@ import br.com.billing.faturamento.repositories.InvoiceRepository;
 import br.com.billing.faturamento.services.exceptions.ObjectAlreadyExistsException;
 import br.com.billing.faturamento.useful.Utility;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class InvoiceService {
 
     public InvoiceModel save(InvoiceModel invoice) {
         verifyIfExist(invoice);
+
+        invoice.setRegistration(LocalDateTime.now());
+
         return invoiceRepository.save(invoice);
     }
 
@@ -40,13 +45,11 @@ public class InvoiceService {
         invoiceRepository.deleteById(code);
     }
 
-    public InvoiceModel update(Integer code, InvoiceModel invoice) {
-        InvoiceModel invoiceRecovered = findByCode(code);
+    public InvoiceModel update(InvoiceModel invoice) {
+        InvoiceModel invoiceRecovered = findByCode(invoice.getCode());
 
-        invoice.setCode(invoiceRecovered.getCode());
-        invoice.setRegistration(invoiceRecovered.getRegistration());
-
-        return invoiceRepository.save(invoice);
+        BeanUtils.copyProperties(invoice, invoiceRecovered, "code");
+        return this.invoiceRepository.save(invoiceRecovered);
     }
 
     public List<InvoiceModel> findByFilter(InvoiceFilterModel filter) {
