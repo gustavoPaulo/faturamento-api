@@ -2,9 +2,11 @@ package br.com.billing.faturamento.services;
 
 import br.com.billing.faturamento.model.InvoiceFilterModel;
 import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.model.MailModel;
 import br.com.billing.faturamento.repositories.InvoiceRepository;
 import br.com.billing.faturamento.services.exceptions.ObjectAlreadyExistsException;
 import br.com.billing.faturamento.useful.Utility;
+import jakarta.validation.Valid;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class InvoiceService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private MailService mailService;
 
     public List<InvoiceModel> list() {
         return invoiceRepository.findAll();
@@ -62,5 +67,9 @@ public class InvoiceService {
         if (Objects.nonNull(invoiceRecovered.get().getCode()) && invoiceRecovered.isPresent()) {
             throw new ObjectAlreadyExistsException();
         }
+    }
+
+    public MailModel sendInvoiceByEmail(@Valid InvoiceModel invoice, String userEmail) {
+        return mailService.sendEmail(invoice, userEmail);
     }
 }

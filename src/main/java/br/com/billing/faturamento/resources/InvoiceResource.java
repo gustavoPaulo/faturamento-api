@@ -2,6 +2,7 @@ package br.com.billing.faturamento.resources;
 
 import br.com.billing.faturamento.model.InvoiceFilterModel;
 import br.com.billing.faturamento.model.InvoiceModel;
+import br.com.billing.faturamento.model.MailModel;
 import br.com.billing.faturamento.services.InvoiceService;
 import br.com.billing.faturamento.useful.Utility;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(Utility.RESOURCE_REQUEST_MAPPING)
@@ -51,5 +53,11 @@ public class InvoiceResource {
     public ResponseEntity<InvoiceModel> update(@Valid @RequestBody InvoiceModel invoice) {
         InvoiceModel invoiceUpdated = invoiceService.update(invoice);
         return ResponseEntity.ok(invoiceUpdated);
+    }
+
+    @PostMapping(Utility.RESOURCE_INVOICE_USER_EMAIL)
+    public ResponseEntity<MailModel> sendInvoiceByEmail(@Valid @RequestBody InvoiceModel invoice, @PathVariable String userEmail) {
+        MailModel mailResponse = invoiceService.sendInvoiceByEmail(invoice, userEmail);
+        return ResponseEntity.status(HttpStatus.OK).body(mailResponse);
     }
 }
