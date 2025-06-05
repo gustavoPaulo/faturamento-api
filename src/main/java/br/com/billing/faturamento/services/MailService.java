@@ -2,6 +2,7 @@ package br.com.billing.faturamento.services;
 
 import br.com.billing.faturamento.model.InvoiceModel;
 import br.com.billing.faturamento.model.MailModel;
+import br.com.billing.faturamento.model.enums.InvoiceType;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -11,9 +12,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 @Service
@@ -37,7 +44,7 @@ public class MailService {
     public MailModel sendEmail(InvoiceModel invoice, String userEmail) {
         MailModel mail = new MailModel();
         mail.setInvoice(invoice);
-        mail.setDestination(userEmail);
+        mail.setDestination(userEmail.replace("'", ""));
 
         try {
             Properties properties = new Properties();
@@ -57,6 +64,7 @@ public class MailService {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(userEmail.replace("'", "")));
             message.setSubject("Billing - Envio de faturamento");
             message.setText(fillEmail(Collections.singletonList(invoice)));
+            message.setContent(fillEmail(Collections.singletonList(invoice)), "text/html; charset=UTF-8");
 
             Transport.send(message);
 
@@ -90,8 +98,11 @@ public class MailService {
 
         StringBuilder builder = new StringBuilder();
         builder.append(getPeriod() + ", ");
-        builder.append("Seguem os dados do(s) faturamento(s) solicitado!");
+        builder.append("<br><br>");
+        builder.append("Seguem os dados do(s) faturamento(s) solicitados!");
+        builder.append("<br><br>");
         builder.append(fillDataTableInHtml(list));
+        builder.append("<br><br>");
         builder.append("Obrigado por usar nosso serviço!");
 
         return builder.toString();
@@ -123,15 +134,31 @@ public class MailService {
                       "          </tr>                                  ";
 
         for (InvoiceModel invoice : list) {
-            html += "<tr><td>" + invoice.getType() + "</td></tr>";
-            html += "<tr><td>" + invoice.getDescription() + "</td></tr>";
-            html += "<tr><td>" + invoice.getPrice() + "</td></tr>";
-            html += "<tr><td>" + invoice.getDateRelease() + "</td></tr>";
-            html += "<tr><td>" + invoice.getRegistration() + "</td></tr>";
+            html += "<tr><td>" + (invoice.getType().equals(InvoiceType.RECIPE)? "Receita" : "Despesa") + "</td>";
+            html += "<td>" + invoice.getDescription() + "</td>";
+            html += "<td>" + convertFromBigdecimalToString(invoice.getPrice())  + "</td>";
+            html += "<td>" + convertLocalDateToString(invoice.getDateRelease()) + "</td>";
+            html += "<td>" + convertLocalDateTimeToString(invoice.getRegistration()) + "</td></tr>";
         }
 
         html += "</table></body></html>";
 
         return html;
+    }
+
+    private String convertFromBigdecimalToString(BigDecimal invoice) {
+        Locale brasilLocale = new Locale("pt", "BR");
+        NumberFormat formatador = NumberFormat.getCurrencyInstance(brasilLocale);
+        return formatador.format(invoice);
+    }
+
+    private String convertLocalDateToString(LocalDate invoiceDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return invoiceDate.format(formatter);
+    }
+
+    private String convertLocalDateTimeToString(LocalDateTime invoiceDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return invoiceDateTime.format(formatter);
     }
 }
