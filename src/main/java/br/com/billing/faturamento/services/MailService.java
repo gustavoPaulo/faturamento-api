@@ -41,10 +41,12 @@ public class MailService {
     @Value("${spring.mail.port}")
     private String port;
 
-    public MailModel sendEmail(InvoiceModel invoice, String userEmail) {
+    public MailModel sendEmail(List<InvoiceModel> invoices, String userEmail) {
+        String mailUser = userEmail.replace("'", "");
+
         MailModel mail = new MailModel();
-        mail.setInvoice(invoice);
-        mail.setDestination(userEmail.replace("'", ""));
+        mail.setInvoice(invoices);
+        mail.setDestination(mailUser);
 
         try {
             Properties properties = new Properties();
@@ -61,19 +63,19 @@ public class MailService {
 
             MimeMessage message = new MimeMessage(session);
             message.setFrom(this.sender);
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(userEmail.replace("'", "")));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailUser));
             message.setSubject("Billing - Envio de faturamento");
-            message.setText(fillEmail(Collections.singletonList(invoice)));
-            message.setContent(fillEmail(Collections.singletonList(invoice)), "text/html; charset=UTF-8");
+            message.setText(fillEmail(invoices));
+            message.setContent(fillEmail(invoices), "text/html; charset=UTF-8");
 
             Transport.send(message);
 
             mail.setStatus("OK");
-            mail.setMessage("Faturamento enviado com sucesso para [" + userEmail + "]");
+            mail.setMessage("Faturamento enviado com sucesso para [" + mailUser + "]");
 
         } catch (Exception e) {
             mail.setStatus("NOK");
-            mail.setMessage("Error ao enviar faturamento por e-mail para [" + userEmail + "]: " + e.getMessage());
+            mail.setMessage("Error ao enviar faturamento por e-mail para [" + mailUser + "]: " + e.getMessage());
         }
 
         return mail;

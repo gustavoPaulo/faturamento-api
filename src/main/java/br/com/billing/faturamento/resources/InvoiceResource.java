@@ -56,8 +56,8 @@ public class InvoiceResource {
     }
 
     @PostMapping(Utility.RESOURCE_INVOICE_USER_EMAIL)
-    public ResponseEntity<MailModel> sendInvoiceByEmail(@Valid @RequestBody InvoiceModel invoice, @PathVariable String userEmail) {
-        MailModel mailResponse = invoiceService.sendInvoiceByEmail(invoice, userEmail);
+    public ResponseEntity<MailModel> sendInvoiceByEmail(@Valid @RequestBody List<InvoiceModel> invoices, @PathVariable String userEmail) {
+        MailModel mailResponse = invoiceService.sendInvoiceByEmail(invoices, userEmail);
         return ResponseEntity.status(HttpStatus.OK).body(mailResponse);
     }
 }

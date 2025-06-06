@@ -69,7 +69,7 @@ public class InvoiceService {
         }
     }
 
-    public MailModel sendInvoiceByEmail(@Valid InvoiceModel invoice, String userEmail) {
-        return mailService.sendEmail(invoice, userEmail);
+    public MailModel sendInvoiceByEmail(@Valid List<InvoiceModel> invoices, String userEmail) {
+        return mailService.sendEmail(invoices, userEmail);
     }
 }

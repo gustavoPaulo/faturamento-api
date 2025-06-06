@@ -1,20 +1,22 @@
 package br.com.billing.faturamento.model;
 
+import java.util.List;
+
 public class MailModel {
 
     private String status;
     private String message;
     private String destination;
-    private InvoiceModel invoice;
+    private List<InvoiceModel> invoices;
 
     public MailModel() {
     }
 
-    public MailModel(String status, String message, String destination, InvoiceModel invoice) {
+    public MailModel(String status, String message, String destination, List<InvoiceModel> invoices) {
         this.status = status;
         this.message = message;
         this.destination = destination;
-        this.invoice = invoice;
+        this.invoices = invoices;
     }
 
     public String getStatus() {
@@ -41,11 +43,11 @@ public class MailModel {
         this.destination = destination;
     }
 
-    public InvoiceModel getInvoice() {
-        return invoice;
+    public List<InvoiceModel> getInvoice() {
+        return invoices;
     }
 
-    public void setInvoice(InvoiceModel invoice) {
-        this.invoice = invoice;
+    public void setInvoice(List<InvoiceModel> invoices) {
+        this.invoices = invoices;
     }
 }
